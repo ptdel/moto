@@ -54,6 +54,7 @@ from moto.stepfunctions import stepfunction_backends
 from moto.sts import sts_backends
 from moto.swf import swf_backends
 from moto.xray import xray_backends
+from moto.efs import efs_backends
 
 BACKENDS = {
     "acm": acm_backends,
@@ -111,6 +112,7 @@ BACKENDS = {
     "resourcegroupstaggingapi": resourcegroupstaggingapi_backends,
     "iot": iot_backends,
     "iot-data": iotdata_backends,
+    "efs": efs_backends,
 }
 
 

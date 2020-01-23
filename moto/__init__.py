@@ -56,6 +56,7 @@ from .stepfunctions import mock_stepfunctions  # noqa
 from .sts import mock_sts, mock_sts_deprecated  # noqa
 from .swf import mock_swf, mock_swf_deprecated  # noqa
 from .xray import XRaySegment, mock_xray, mock_xray_client  # noqa
+from .efs import mock_efs  # noqa
 
 # import logging
 # logging.getLogger('boto').setLevel(logging.CRITICAL)
