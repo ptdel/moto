@@ -7,12 +7,12 @@ class BaseObject(BaseModel):
     """ BaseObject for All EFS DataTypes """
 
     def pascal_case(self, attr):
-        """ EFS Datatypes and their attributes are all PascalCase """
+        """ EFS Datatypes and their attributes are all *PascalCase* """
         return "".join([word.title() for word in attr.split("_")])
 
-    def __get__(self, instance, owner):
+    def response(self):
         """ Return instances of this class as a dict with PascalCase'd keys """
-        return {self.pascal_case(k):v for k,v in instance.__dict__.items()}
+        return {self.pascal_case(k):v for k,v in self.__dict__.items()}
 
 
 class AccessPointDescription(BaseObject):
@@ -42,6 +42,13 @@ class AccessPointDescription(BaseObject):
         self.root_directory = root_directory
         self.tags = tags
 
+    def __repr__(self):
+        return self.response()
+
+    @property
+    def physical_resource_id(self):
+        return self.name
+
 
 class CreationInfo(BaseObject):
 
@@ -49,6 +56,9 @@ class CreationInfo(BaseObject):
         self.owner_gid = owner_gid
         self.owner_uid = owner_uid
         self.permissions = permissions
+
+    def __repr__(self):
+        return self.response()
 
 
 class FileSystemDescription(BaseObject):
@@ -86,6 +96,14 @@ class FileSystemDescription(BaseObject):
         self.tags = tags
         self.throughput_mode = throughput_mode
 
+    def __repr__(self):
+        return self.response()
+
+    @property
+    def physical_resource_id(self):
+        return self.name
+
+
 
 class FileSystemSize(BaseObject):
 
@@ -93,13 +111,19 @@ class FileSystemSize(BaseObject):
         self.timestamp = timestamp
         self.value = value
         self.value_in_IA = value_in_IA
-        self.value_in_standard = value_
+        self.value_in_standard = value_in_standard
+
+    def __repr__(self):
+        return self.response()
 
 
 class LifeCyclePolicy(BaseObject):
 
     def __init__(self, transition_to_IA):
         self.transition_to_IA = transition_to_IA
+
+    def __repr__(self):
+        return self.response()
 
 
 class MountTargetDescription(BaseObject):
@@ -127,6 +151,9 @@ class MountTargetDescription(BaseObject):
         self.owner_id = owner_id
         self.subnet_id = subnet_id
 
+    def __repr__(self):
+        return self.response()
+
 
 class PosixUser(BaseObject):
 
@@ -135,12 +162,18 @@ class PosixUser(BaseObject):
         self.secondary_gids = secondary_gids
         self.uid = uid
 
+    def __repr__(self):
+        return self.response()
+
 
 class RootDirectory(BaseObject):
 
     def __init__(self, creation_info, path):
         self.creation_info = creation_info
         self.path = path
+
+    def __repr__(self):
+        return self.response()
 
 
 class Tag(BaseObject):
@@ -149,25 +182,98 @@ class Tag(BaseObject):
         self.key = key
         self.value = value
 
+    def __repr__(self):
+        return self.response()
+
 
 class EFSBackend(BaseBackend):
     def __init__(self, region_name=None):
         super(EFSBackend, self).__init__()
         self.region_name = region_name
+        self.access_points = []
+        self.file_systems = []
+        self.file_system_policies = []
+        self.lifecycle_configurations = []
+        self.mount_targets = []
+        self.mount_target_security_groups = []
+        self.tags = []
 
     def reset(self):
         region_name = self.region_name
         self.__dict__ = {}
         self.__init__(region_name)
 
-    def create_file_system(self, creation_token, performance_mode, encrypted, kms_key_id, throughput_mode, provisioned_throughput_in_mibps, tags):
-        # implement here
-        return owner_id, creation_token, file_system_id, creation_time, life_cycle_state, name, number_of_mount_targets, size_in_bytes, performance_mode, encrypted, kms_key_id, throughput_mode, provisioned_throughput_in_mibps, tags
+    def create_access_point(self):
+        pass
+
+    def create_file_system(self):
+        pass
+
+    def create_mount_target(self):
+        pass
+
+    def create_tags(self):
+        pass
+
+    def delete_access_point(self):
+        pass
+
+    def delete_file_system(self):
+        pass
+
+    def delete_file_system_policy(self):
+        pass
+
+    def delete_mount_target(self):
+        pass
+
+    def delete_tags(self):
+        pass
+
+    def describe_access_points(self):
+        pass
+
+    def describe_file_system_policy(self):
+        pass
+
+    def describe_file_systems(self):
+        pass
+
+    def describe_lifecycle_configuration(self):
+        pass
+
+    def describe_mount_target_security_groups(self):
+        pass
+
+    def describe_mount_targets(self):
+        pass
     
-    # add methods from here
+    def describe_tags(self):
+        pass
+
+    def list_tags_for_resource(self):
+        pass
+
+    def modify_mount_target_security_groups(self):
+        pass
+
+    def put_file_system_policy(self):
+        pass
+
+    def put_lifecycle_configuration(self):
+        pass
+
+    def tag_resources(self):
+        pass
+
+    def untag_resource(self):
+        pass
+
+    def update_file_system(self):
+        pass
 
 
-efs_backends = {}
+
 for region in Session().get_available_regions("efs"):
     efs_backends[region] = EFSBackend()
 for region in Session().get_available_regions("efs", partition_name="aws-us-gov"):
