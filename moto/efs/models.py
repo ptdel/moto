@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from boto3 import Session
 from moto.core import BaseBackend, BaseModel
-
+from .utils import random_file_system_id, aws_date_time
 
 class BaseObject(BaseModel):
     """ BaseObject for All EFS DataTypes """
@@ -65,20 +65,20 @@ class FileSystemDescription(BaseObject):
 
     def __init__(
         self,
-        creation_time,
-        creation_token,
-        encrypted,
-        file_system_id,
-        kms_key_id,
-        life_cycle_state,
-        name,
-        number_of_mount_targets,
-        owner_id,
-        performance_mode,
-        provisioned_throughput_in_mibps,
-        size_in_bytes,
-        tags,
-        throughput_mode,
+        creation_time=None,
+        creation_token=None,
+        encrypted=None,
+        file_system_id=None,
+        kms_key_id=None,
+        life_cycle_state=None,
+        name=None,
+        number_of_mount_targets=None,
+        owner_id=None,
+        performance_mode=None,
+        provisioned_throughput_in_mibps=None,
+        size_in_bytes=None,
+        tags=None,
+        throughput_mode=None,
         ):
 
         self.creation_time = creation_time
@@ -190,13 +190,13 @@ class EFSBackend(BaseBackend):
     def __init__(self, region_name=None):
         super(EFSBackend, self).__init__()
         self.region_name = region_name
-        self.access_points = []
-        self.file_systems = []
-        self.file_system_policies = []
-        self.lifecycle_configurations = []
-        self.mount_targets = []
-        self.mount_target_security_groups = []
-        self.tags = []
+        self.access_points = {}
+        self.file_systems = {}
+        self.file_system_policies = {}
+        self.lifecycle_configurations = {}
+        self.mount_targets = {}
+        self.mount_target_security_groups = {}
+        self.tags = {}
 
     def reset(self):
         region_name = self.region_name
@@ -206,8 +206,39 @@ class EFSBackend(BaseBackend):
     def create_access_point(self, *, client_token, tags, file_system_id, posix_user, root_directory):
         pass
 
-    def create_file_system(self, *, creation_token, performance_mode, encrypted, kms_key_id, throughput_mode, provisioned_throughput_in_mibps, tags):
-        pass
+    def create_file_system(
+        self, *,
+        creation_token,
+        encrypted=None,
+        kms_key_id=None,
+        performance_mode=None,
+        provisioned_throughput_in_mibps=None,
+        tags=None,
+        throughput_mode=None,
+        ):
+
+        file_system = FileSystemDescription(
+            creation_time=aws_date_time(),
+            creation_token=creation_token,
+            encrypted=encrypted or False,
+            file_system_id=random_file_system_id(),
+            number_of_mount_targets=0,
+            life_cycle_state='available',
+            kms_key_id=kms_key_id,
+            size_in_bytes=FileSystemSize(
+                timestamp=aws_date_time(),
+                value=6144,
+                value_in_IA=0,
+                value_in_standard=6144,
+            ),
+            performance_mode=performance_mode or "generalPurpose",
+            provisioned_throughput_in_mibps=provisioned_throughput_in_mibps,
+            tags=tags,
+            throughput_mode=throughput_mode or "bursting",
+            )
+
+        self.file_systems[file_system.file_system_id] = file_system
+        return file_system
 
     def create_mount_target(self, *, file_system_id, subnet_id, ip_address, security_groups):
         pass
@@ -273,7 +304,7 @@ class EFSBackend(BaseBackend):
         pass
 
 
-
+efs_backends = {}
 for region in Session().get_available_regions("efs"):
     efs_backends[region] = EFSBackend()
 for region in Session().get_available_regions("efs", partition_name="aws-us-gov"):
