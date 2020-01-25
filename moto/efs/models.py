@@ -203,73 +203,73 @@ class EFSBackend(BaseBackend):
         self.__dict__ = {}
         self.__init__(region_name)
 
-    def create_access_point(self):
+    def create_access_point(self, *, client_token, tags, file_system_id, posix_user, root_directory):
         pass
 
-    def create_file_system(self):
+    def create_file_system(self, *, creation_token, performance_mode, encrypted, kms_key_id, throughput_mode, provisioned_throughput_in_mibps, tags):
         pass
 
-    def create_mount_target(self):
+    def create_mount_target(self, *, file_system_id, subnet_id, ip_address, security_groups):
         pass
 
-    def create_tags(self):
+    def create_tags(self, *, file_system_id, tags):
         pass
 
-    def delete_access_point(self):
+    def delete_access_point(self, *, access_point_id):
         pass
 
-    def delete_file_system(self):
+    def delete_file_system(self, *, file_system_id):
         pass
 
-    def delete_file_system_policy(self):
+    def delete_file_system_policy(self, *, file_system_id):
         pass
 
-    def delete_mount_target(self):
+    def delete_mount_target(self, *, mount_target_id):
         pass
 
-    def delete_tags(self):
+    def delete_tags(self, *, file_system_id, tag_keys):
         pass
 
-    def describe_access_points(self):
+    def describe_access_points(self, *, max_results, next_token, access_point_id, file_system_id):
         pass
 
-    def describe_file_system_policy(self):
+    def describe_file_system_policy(self, *, file_system_id):
         pass
 
-    def describe_file_systems(self):
+    def describe_file_systems(self, *, max_items, marker, creation_token, file_system_id):
         pass
 
-    def describe_lifecycle_configuration(self):
+    def describe_lifecycle_configuration(self, *, file_system_id):
         pass
 
-    def describe_mount_target_security_groups(self):
+    def describe_mount_target_security_groups(self, *, mount_target_id):
         pass
 
-    def describe_mount_targets(self):
+    def describe_mount_targets(self, *, max_items, marker, file_system_id, mount_target_id, access_point_id):
         pass
     
-    def describe_tags(self):
+    def describe_tags(self, *, max_items, marker, file_system_id):
         pass
 
-    def list_tags_for_resource(self):
+    def list_tags_for_resource(self, *, resourcde_id, max_results, next_token):
         pass
 
-    def modify_mount_target_security_groups(self):
+    def modify_mount_target_security_groups(self, *, mount_target_id, security_groups):
         pass
 
-    def put_file_system_policy(self):
+    def put_file_system_policy(self, *, file_system_id, policy, bypass_policy_lockout_safety_check):
         pass
 
-    def put_lifecycle_configuration(self):
+    def put_lifecycle_configuration(self, *, file_system_id, lifecycle_policies):
         pass
 
-    def tag_resources(self):
+    def tag_resources(self, *, resource_id, tags):
         pass
 
-    def untag_resource(self):
+    def untag_resource(self, *, resource_id, tag_keys):
         pass
 
-    def update_file_system(self):
+    def update_file_system(self, *, file_system_id, throughput_mode, provisioned_throughput_in_mibps):
         pass
 
 
