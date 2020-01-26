@@ -27,7 +27,7 @@ class AccessPointNotFound(RESTError):
 
 
 class BadRequest(RESTError):
-    """ """
+    """ Something Bad! """
     code = 400
 
     def __init__(self):

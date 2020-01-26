@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from moto.core.responses import BaseResponse
+from .exceptions import BadRequest
 from .models import efs_backends
 import json
 
@@ -18,8 +19,10 @@ class EFSResponse(BaseResponse):
         kms_key_id = self._get_param("KmsKeyId")
         throughput_mode = self._get_param("ThroughputMode")
         provisioned_throughput_in_mibps = self._get_param("ProvisionedThroughputInMibps")
-        tags = self._get_list_prefix("Tags.member")
-        owner_id, creation_token, file_system_id, creation_time, life_cycle_state, name, number_of_mount_targets, size_in_bytes, performance_mode, encrypted, kms_key_id, throughput_mode, provisioned_throughput_in_mibps, tags = self.efs_backend.create_file_system(
+        tags = self._get_param("Tags")
+        if throughput_mode == "provisioned" and not provisioned_throughput_in_mibps:
+            return BadRequest
+        request = self.efs_backend.create_file_system(
             creation_token=creation_token,
             performance_mode=performance_mode,
             encrypted=encrypted,
@@ -29,7 +32,7 @@ class EFSResponse(BaseResponse):
             tags=tags,
         )
         # TODO: adjust response
-        return json.dumps(dict(ownerId=owner_id, creationToken=creation_token, fileSystemId=file_system_id, creationTime=creation_time, lifeCycleState=life_cycle_state, name=name, numberOfMountTargets=number_of_mount_targets, sizeInBytes=size_in_bytes, performanceMode=performance_mode, encrypted=encrypted, kmsKeyId=kms_key_id, throughputMode=throughput_mode, provisionedThroughputInMibps=provisioned_throughput_in_mibps, tags=tags))
+        return json.dumps(request)
     # add methods from here
 
 

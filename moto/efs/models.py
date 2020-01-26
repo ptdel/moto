@@ -1,7 +1,8 @@
 from __future__ import unicode_literals
+import boto3
 from boto3 import Session
 from moto.core import BaseBackend, BaseModel
-from .utils import random_file_system_id, aws_date_time
+from .utils import random_file_system_id, aws_date_time, get_name_tag
 
 class BaseObject(BaseModel):
     """ BaseObject for All EFS DataTypes """
@@ -107,10 +108,10 @@ class FileSystemDescription(BaseObject):
 
 class FileSystemSize(BaseObject):
 
-    def __init__(self, timestamp, value, value_in_IA, value_in_standard):
+    def __init__(self, timestamp, value, value_in_I_A, value_in_standard):
         self.timestamp = timestamp
         self.value = value
-        self.value_in_IA = value_in_IA
+        self.value_in_I_A = value_in_I_A
         self.value_in_standard = value_in_standard
 
     def __repr__(self):
@@ -218,6 +219,7 @@ class EFSBackend(BaseBackend):
         ):
 
         file_system = FileSystemDescription(
+            owner_id="123456789012",
             creation_time=aws_date_time(),
             creation_token=creation_token,
             encrypted=encrypted or False,
@@ -228,17 +230,18 @@ class EFSBackend(BaseBackend):
             size_in_bytes=FileSystemSize(
                 timestamp=aws_date_time(),
                 value=6144,
-                value_in_IA=0,
+                value_in_I_A=0,
                 value_in_standard=6144,
-            ),
+            ).response(),
             performance_mode=performance_mode or "generalPurpose",
             provisioned_throughput_in_mibps=provisioned_throughput_in_mibps,
             tags=tags,
             throughput_mode=throughput_mode or "bursting",
+            name=get_name_tag(tags)
             )
 
-        self.file_systems[file_system.file_system_id] = file_system
-        return file_system
+        self.file_systems[file_system.file_system_id] = file_system.response()
+        return file_system.response()
 
     def create_mount_target(self, *, file_system_id, subnet_id, ip_address, security_groups):
         pass

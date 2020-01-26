@@ -12,5 +12,11 @@ def random_file_system_id(length=8):
     plug = "".join([random.choice(chars) for _ in range(length)])
     return "fs-" + plug
 
+
 def aws_date_time():
-    return datetime.now(tzlocal()).replace(microsecond=0)
+    return int((datetime.now() - datetime(1970, 1, 1)).total_seconds())
+
+def get_name_tag(tags):
+    for tag in tags:
+        if tag["Key"] == "Name":
+            return tag["Value"]
