@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
-import boto3
 from boto3 import Session
 from moto.core import BaseBackend, BaseModel
 from .utils import random_file_system_id, aws_date_time, get_name_tag
+
 
 class BaseObject(BaseModel):
     """ BaseObject for All EFS DataTypes """
@@ -30,7 +30,7 @@ class AccessPointDescription(BaseObject):
         posix_user,
         root_directory,
         tags,
-        ):
+    ):
 
         self.access_point_arn = access_point_arn
         self.access_point_id = access_point_id
@@ -80,7 +80,7 @@ class FileSystemDescription(BaseObject):
         size_in_bytes=None,
         tags=None,
         throughput_mode=None,
-        ):
+    ):
 
         self.creation_time = creation_time
         self.creation_token = creation_token
@@ -103,7 +103,6 @@ class FileSystemDescription(BaseObject):
     @property
     def physical_resource_id(self):
         return self.name
-
 
 
 class FileSystemSize(BaseObject):
@@ -140,8 +139,8 @@ class MountTargetDescription(BaseObject):
         network_interface_id,
         owner_id,
         subnet_id,
-        ):
-    
+    ):
+
         self.availability_zone_id = availability_zone_id
         self.availability_zone_name = availability_zone_name
         self.file_system_id = file_system_id
@@ -216,7 +215,7 @@ class EFSBackend(BaseBackend):
         provisioned_throughput_in_mibps=None,
         tags=None,
         throughput_mode=None,
-        ):
+    ):
 
         file_system = FileSystemDescription(
             owner_id="123456789012",
@@ -238,7 +237,7 @@ class EFSBackend(BaseBackend):
             tags=tags,
             throughput_mode=throughput_mode or "bursting",
             name=get_name_tag(tags)
-            )
+        )
 
         self.file_systems[file_system.file_system_id] = file_system.response()
         return file_system.response()
@@ -281,7 +280,7 @@ class EFSBackend(BaseBackend):
 
     def describe_mount_targets(self, *, max_items, marker, file_system_id, mount_target_id, access_point_id):
         pass
-    
+
     def describe_tags(self, *, max_items, marker, file_system_id):
         pass
 

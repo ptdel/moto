@@ -136,7 +136,7 @@ class NetworkInterfaceLimitExceeded(RESTError):
 
     def __init__(self):
         super().__init__(self.__class__.__name__, self.__doc__)
-    
+
 
 class NoFreeAddressesInSubnet(RESTError):
     """ """

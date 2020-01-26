@@ -1,10 +1,7 @@
 from __future__ import unicode_literals
 import random
 import string
-# import six
 from datetime import datetime
-from dateutil.tz import tzlocal
-
 
 
 def random_file_system_id(length=8):
@@ -15,6 +12,7 @@ def random_file_system_id(length=8):
 
 def aws_date_time():
     return int((datetime.now() - datetime(1970, 1, 1)).total_seconds())
+
 
 def get_name_tag(tags):
     for tag in tags:

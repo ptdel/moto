@@ -11,7 +11,6 @@ class EFSResponse(BaseResponse):
     def efs_backend(self):
         return efs_backends[self.region]
 
-    
     def create_file_system(self):
         creation_token = self._get_param("CreationToken")
         performance_mode = self._get_param("PerformanceMode")
