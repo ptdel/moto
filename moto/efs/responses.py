@@ -6,7 +6,8 @@ import json
 
 
 class EFSResponse(BaseResponse):
-    SERVICE_NAME = 'efs'
+    SERVICE_NAME = "efs"
+
     @property
     def efs_backend(self):
         return efs_backends[self.region]
@@ -17,7 +18,9 @@ class EFSResponse(BaseResponse):
         encrypted = self._get_param("Encrypted")
         kms_key_id = self._get_param("KmsKeyId")
         throughput_mode = self._get_param("ThroughputMode")
-        provisioned_throughput_in_mibps = self._get_param("ProvisionedThroughputInMibps")
+        provisioned_throughput_in_mibps = self._get_param(
+            "ProvisionedThroughputInMibps"
+        )
         tags = self._get_param("Tags")
         if throughput_mode == "provisioned" and not provisioned_throughput_in_mibps:
             return BadRequest
@@ -32,6 +35,7 @@ class EFSResponse(BaseResponse):
         )
         # TODO: adjust response
         return json.dumps(request)
+
     # add methods from here
 
 

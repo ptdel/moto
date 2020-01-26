@@ -5,9 +5,10 @@ import sure  # noqa
 import moto.server as server
 from moto import mock_efs
 
-'''
+"""
 Test the different server responses
-'''
+"""
+
 
 @mock_efs
 def test_efs_list():

@@ -4,6 +4,7 @@ from moto.core.exceptions import RESTError
 
 class AccessPointAlreadyExists(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -12,6 +13,7 @@ class AccessPointAlreadyExists(RESTError):
 
 class AccessPointLimitExceeded(RESTError):
     """ """
+
     code = 403
 
     def __init__(self):
@@ -20,6 +22,7 @@ class AccessPointLimitExceeded(RESTError):
 
 class AccessPointNotFound(RESTError):
     """ """
+
     code = 404
 
     def __init__(self):
@@ -28,6 +31,7 @@ class AccessPointNotFound(RESTError):
 
 class BadRequest(RESTError):
     """ Something Bad! """
+
     code = 400
 
     def __init__(self):
@@ -36,6 +40,7 @@ class BadRequest(RESTError):
 
 class DependencyTimeout(RESTError):
     """ """
+
     code = 504
 
     def __init__(self):
@@ -44,6 +49,7 @@ class DependencyTimeout(RESTError):
 
 class FileSystemAlreadyExists(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -52,6 +58,7 @@ class FileSystemAlreadyExists(RESTError):
 
 class FileSystemInUse(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -60,6 +67,7 @@ class FileSystemInUse(RESTError):
 
 class FileSystemLimitExceeded(RESTError):
     """ """
+
     code = 403
 
     def __init__(self):
@@ -68,6 +76,7 @@ class FileSystemLimitExceeded(RESTError):
 
 class FileSystemNotFound(RESTError):
     """ """
+
     code = 404
 
     def __init__(self):
@@ -76,6 +85,7 @@ class FileSystemNotFound(RESTError):
 
 class IncorrectFileSystemLifeCycleState(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -84,6 +94,7 @@ class IncorrectFileSystemLifeCycleState(RESTError):
 
 class IncorrectMountTargetState(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -92,6 +103,7 @@ class IncorrectMountTargetState(RESTError):
 
 class InsufficientThroughputCapacity(RESTError):
     """ """
+
     code = 503
 
     def __init__(self):
@@ -100,6 +112,7 @@ class InsufficientThroughputCapacity(RESTError):
 
 class InternalServerError(RESTError):
     """ """
+
     code = 500
 
     def __init__(self):
@@ -108,6 +121,7 @@ class InternalServerError(RESTError):
 
 class IpAddressInUse(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -116,6 +130,7 @@ class IpAddressInUse(RESTError):
 
 class MountTargetConflict(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -124,6 +139,7 @@ class MountTargetConflict(RESTError):
 
 class MountTargetNotFound(RESTError):
     """ """
+
     code = 404
 
     def __init__(self):
@@ -132,6 +148,7 @@ class MountTargetNotFound(RESTError):
 
 class NetworkInterfaceLimitExceeded(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -140,6 +157,7 @@ class NetworkInterfaceLimitExceeded(RESTError):
 
 class NoFreeAddressesInSubnet(RESTError):
     """ """
+
     code = 409
 
     def __init__(self):
@@ -148,6 +166,7 @@ class NoFreeAddressesInSubnet(RESTError):
 
 class PolicyNotFound(RESTError):
     """ """
+
     code = 404
 
     def __init__(self):
@@ -156,6 +175,7 @@ class PolicyNotFound(RESTError):
 
 class SecurityGroupLimitExceeded(RESTError):
     """ """
+
     code = 400
 
     def __init__(self):
@@ -164,6 +184,7 @@ class SecurityGroupLimitExceeded(RESTError):
 
 class SecurityGroupNotFound(RESTError):
     """ """
+
     code = 400
 
     def __init__(self):
@@ -172,6 +193,7 @@ class SecurityGroupNotFound(RESTError):
 
 class SubnetNotFound(RESTError):
     """ """
+
     code = 400
 
     def __init__(self):
@@ -180,6 +202,7 @@ class SubnetNotFound(RESTError):
 
 class ThroughputLimitExceeded(RESTError):
     """ """
+
     code = 400
 
     def __init__(self):
@@ -188,6 +211,7 @@ class ThroughputLimitExceeded(RESTError):
 
 class TooManyRequests(RESTError):
     """ """
+
     code = 429
 
     def __init__(self):
@@ -196,6 +220,7 @@ class TooManyRequests(RESTError):
 
 class UnsupportedAvailabilityZone(RESTError):
     """ """
+
     code = 400
 
     def __init__(self):

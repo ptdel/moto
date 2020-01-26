@@ -10,5 +10,5 @@ response = EFSResponse()
 
 
 url_paths = {
-    '{0}/.*$': response.dispatch,
+    "{0}/.*$": response.dispatch,
 }

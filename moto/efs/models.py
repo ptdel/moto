@@ -13,11 +13,10 @@ class BaseObject(BaseModel):
 
     def response(self):
         """ Return instances of this class as a dict with PascalCase'd keys """
-        return {self.pascal_case(k):v for k,v in self.__dict__.items()}
+        return {self.pascal_case(k): v for k, v in self.__dict__.items()}
 
 
 class AccessPointDescription(BaseObject):
-
     def __init__(
         self,
         access_point_arn,
@@ -52,7 +51,6 @@ class AccessPointDescription(BaseObject):
 
 
 class CreationInfo(BaseObject):
-
     def __init__(self, owner_gid, owner_uid, permissions):
         self.owner_gid = owner_gid
         self.owner_uid = owner_uid
@@ -63,7 +61,6 @@ class CreationInfo(BaseObject):
 
 
 class FileSystemDescription(BaseObject):
-
     def __init__(
         self,
         creation_time=None,
@@ -106,7 +103,6 @@ class FileSystemDescription(BaseObject):
 
 
 class FileSystemSize(BaseObject):
-
     def __init__(self, timestamp, value, value_in_I_A, value_in_standard):
         self.timestamp = timestamp
         self.value = value
@@ -118,7 +114,6 @@ class FileSystemSize(BaseObject):
 
 
 class LifeCyclePolicy(BaseObject):
-
     def __init__(self, transition_to_IA):
         self.transition_to_IA = transition_to_IA
 
@@ -127,7 +122,6 @@ class LifeCyclePolicy(BaseObject):
 
 
 class MountTargetDescription(BaseObject):
-
     def __init__(
         self,
         availability_zone_id,
@@ -156,7 +150,6 @@ class MountTargetDescription(BaseObject):
 
 
 class PosixUser(BaseObject):
-
     def __init__(self, gid, secondary_gids, uid):
         self.gid = gid
         self.secondary_gids = secondary_gids
@@ -167,7 +160,6 @@ class PosixUser(BaseObject):
 
 
 class RootDirectory(BaseObject):
-
     def __init__(self, creation_info, path):
         self.creation_info = creation_info
         self.path = path
@@ -177,7 +169,6 @@ class RootDirectory(BaseObject):
 
 
 class Tag(BaseObject):
-
     def __init__(self, key, value):
         self.key = key
         self.value = value
@@ -203,11 +194,14 @@ class EFSBackend(BaseBackend):
         self.__dict__ = {}
         self.__init__(region_name)
 
-    def create_access_point(self, *, client_token, tags, file_system_id, posix_user, root_directory):
+    def create_access_point(
+        self, *, client_token, tags, file_system_id, posix_user, root_directory
+    ):
         pass
 
     def create_file_system(
-        self, *,
+        self,
+        *,
         creation_token,
         encrypted=None,
         kms_key_id=None,
@@ -224,7 +218,7 @@ class EFSBackend(BaseBackend):
             encrypted=encrypted or False,
             file_system_id=random_file_system_id(),
             number_of_mount_targets=0,
-            life_cycle_state='available',
+            life_cycle_state="available",
             kms_key_id=kms_key_id,
             size_in_bytes=FileSystemSize(
                 timestamp=aws_date_time(),
@@ -236,13 +230,15 @@ class EFSBackend(BaseBackend):
             provisioned_throughput_in_mibps=provisioned_throughput_in_mibps,
             tags=tags,
             throughput_mode=throughput_mode or "bursting",
-            name=get_name_tag(tags)
+            name=get_name_tag(tags),
         )
 
         self.file_systems[file_system.file_system_id] = file_system.response()
         return file_system.response()
 
-    def create_mount_target(self, *, file_system_id, subnet_id, ip_address, security_groups):
+    def create_mount_target(
+        self, *, file_system_id, subnet_id, ip_address, security_groups
+    ):
         pass
 
     def create_tags(self, *, file_system_id, tags):
@@ -263,13 +259,17 @@ class EFSBackend(BaseBackend):
     def delete_tags(self, *, file_system_id, tag_keys):
         pass
 
-    def describe_access_points(self, *, max_results, next_token, access_point_id, file_system_id):
+    def describe_access_points(
+        self, *, max_results, next_token, access_point_id, file_system_id
+    ):
         pass
 
     def describe_file_system_policy(self, *, file_system_id):
         pass
 
-    def describe_file_systems(self, *, max_items, marker, creation_token, file_system_id):
+    def describe_file_systems(
+        self, *, max_items, marker, creation_token, file_system_id
+    ):
         pass
 
     def describe_lifecycle_configuration(self, *, file_system_id):
@@ -278,7 +278,9 @@ class EFSBackend(BaseBackend):
     def describe_mount_target_security_groups(self, *, mount_target_id):
         pass
 
-    def describe_mount_targets(self, *, max_items, marker, file_system_id, mount_target_id, access_point_id):
+    def describe_mount_targets(
+        self, *, max_items, marker, file_system_id, mount_target_id, access_point_id
+    ):
         pass
 
     def describe_tags(self, *, max_items, marker, file_system_id):
@@ -290,7 +292,9 @@ class EFSBackend(BaseBackend):
     def modify_mount_target_security_groups(self, *, mount_target_id, security_groups):
         pass
 
-    def put_file_system_policy(self, *, file_system_id, policy, bypass_policy_lockout_safety_check):
+    def put_file_system_policy(
+        self, *, file_system_id, policy, bypass_policy_lockout_safety_check
+    ):
         pass
 
     def put_lifecycle_configuration(self, *, file_system_id, lifecycle_policies):
@@ -302,7 +306,9 @@ class EFSBackend(BaseBackend):
     def untag_resource(self, *, resource_id, tag_keys):
         pass
 
-    def update_file_system(self, *, file_system_id, throughput_mode, provisioned_throughput_in_mibps):
+    def update_file_system(
+        self, *, file_system_id, throughput_mode, provisioned_throughput_in_mibps
+    ):
         pass
 
 
