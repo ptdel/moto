@@ -15,3 +15,5 @@ def test_efs_list():
     backend = server.create_backend_app("efs")
     test_client = backend.test_client()
     # do test
+    res = test_client.get("/")
+    res.status_code.should.equal(404)

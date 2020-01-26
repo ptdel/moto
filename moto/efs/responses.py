@@ -22,8 +22,10 @@ class EFSResponse(BaseResponse):
             "ProvisionedThroughputInMibps"
         )
         tags = self._get_param("Tags")
+
         if throughput_mode == "provisioned" and not provisioned_throughput_in_mibps:
-            return BadRequest
+            return BadRequest  # TODO: return the proper error body and type
+
         request = self.efs_backend.create_file_system(
             creation_token=creation_token,
             performance_mode=performance_mode,
@@ -35,8 +37,3 @@ class EFSResponse(BaseResponse):
         )
         # TODO: adjust response
         return json.dumps(request)
-
-    # add methods from here
-
-
-# add templates from here
