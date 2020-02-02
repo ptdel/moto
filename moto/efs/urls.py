@@ -11,4 +11,5 @@ response = EFSResponse()
 
 url_paths = {
     "{0}/.*$": response.dispatch,
+    "{0}/2015-02-01/file-systems": response.dispatch,
 }
