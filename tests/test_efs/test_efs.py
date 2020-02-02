@@ -2,14 +2,15 @@ from __future__ import unicode_literals
 
 import boto3
 import sure  # noqa
-from nose.tools import raises
-from moto import mock_efs
+from nose.tools import raises, with_setup
+from moto import mock_efs, settings
 from datetime import datetime
 
+server = "motoserver:5000" if settings.TEST_SERVER_MODE else "efs.us-east-1.amazonaws.com"
 
 @mock_efs
-def test_create_file_system_type_bursting():
-    client = boto3.client("efs", region_name="us-east-1")
+def test_create_file_system_type_bursting(server_mode_fixture):
+    client = boto3.client("efs", region_name="us-east-1", endpoint_url=f"http://{server}")
     file_system = client.create_file_system(
         CreationToken="testing-e72ab305-4828-45e7-8d06-0318d54ffdd7",
         Encrypted=True,
@@ -41,7 +42,7 @@ def test_create_file_system_type_bursting():
 
 @mock_efs
 def test_create_file_system_type_provisioned():
-    client = boto3.client("efs", region_name="us-east-1")
+    client = boto3.client("efs", region_name="us-east-1", endpoint_url=f"http://{server}")
     file_system = client.create_file_system(
         CreationToken="testing-f72ab305-4828-45e7-8d06-0318d54ffdd7",
         Encrypted=False,
@@ -76,7 +77,7 @@ def test_create_file_system_type_provisioned():
 @raises(Exception)
 @mock_efs
 def test_create_file_system_type_provisioned_failure():
-    client = boto3.client("efs", region_name="us-east-1")
+    client = boto3.client("efs", region_name="us-east-1", endpoint_url=f"http://{server}")
     client.create_file_system(
         CreationToken="testing-f72ab305-4828-45e7-8d06-0318d54ffdd7",
         Encrypted=False,
