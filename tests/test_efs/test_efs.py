@@ -44,7 +44,10 @@ def test_create_file_system_type_bursting():
 
 @mock_efs
 def test_create_file_system_type_provisioned():
-    client = boto3.client("efs", region_name="us-east-1", endpoint_url=f"http://{server}")
+    if settings.TEST_SERVER_MODE:
+        client = boto3.client("efs", region_name="us-east-1", endpoint_url="http://motoserver:5000")
+    else:
+        client = boto3.client("efs", region_name="us-west-1")
     file_system = client.create_file_system(
         CreationToken="testing-f72ab305-4828-45e7-8d06-0318d54ffdd7",
         Encrypted=False,
@@ -79,7 +82,10 @@ def test_create_file_system_type_provisioned():
 @raises(Exception)
 @mock_efs
 def test_create_file_system_type_provisioned_failure():
-    client = boto3.client("efs", region_name="us-east-1", endpoint_url=f"http://{server}")
+    if settings.TEST_SERVER_MODE:
+        client = boto3.client("efs", region_name="us-east-1", endpoint_url="http://motoserver:5000")
+    else:
+        client = boto3.client("efs", region_name="us-west-1")
     client.create_file_system(
         CreationToken="testing-f72ab305-4828-45e7-8d06-0318d54ffdd7",
         Encrypted=False,
