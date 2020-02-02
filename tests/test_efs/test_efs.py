@@ -10,7 +10,9 @@ from datetime import datetime
 @mock_efs
 def test_create_file_system_type_bursting():
     if settings.TEST_SERVER_MODE:
-        client = boto3.client("efs", region_name="us-east-1", endpoint_url="http://localhost:5000")
+        client = boto3.client(
+            "efs", region_name="us-east-1", endpoint_url="http://localhost:5000"
+        )
     else:
         client = boto3.client("efs", region_name="us-west-1")
     file_system = client.create_file_system(
@@ -45,7 +47,9 @@ def test_create_file_system_type_bursting():
 @mock_efs
 def test_create_file_system_type_provisioned():
     if settings.TEST_SERVER_MODE:
-        client = boto3.client("efs", region_name="us-east-1", endpoint_url="http://localhost:5000")
+        client = boto3.client(
+            "efs", region_name="us-east-1", endpoint_url="http://localhost:5000"
+        )
     else:
         client = boto3.client("efs", region_name="us-west-1")
     file_system = client.create_file_system(
@@ -83,7 +87,9 @@ def test_create_file_system_type_provisioned():
 @mock_efs
 def test_create_file_system_type_provisioned_failure():
     if settings.TEST_SERVER_MODE:
-        client = boto3.client("efs", region_name="us-east-1", endpoint_url="http://localhost:5000")
+        client = boto3.client(
+            "efs", region_name="us-east-1", endpoint_url="http://localhost:5000"
+        )
     else:
         client = boto3.client("efs", region_name="us-west-1")
     client.create_file_system(

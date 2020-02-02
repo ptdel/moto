@@ -266,9 +266,7 @@ class EFSBackend(BaseBackend):
     def describe_file_system_policy(self, file_system_id):
         pass
 
-    def describe_file_systems(
-        self, max_items, marker, creation_token, file_system_id
-    ):
+    def describe_file_systems(self, max_items, marker, creation_token, file_system_id):
         pass
 
     def describe_lifecycle_configuration(self, file_system_id):
