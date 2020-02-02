@@ -6,11 +6,13 @@ from nose.tools import raises, with_setup
 from moto import mock_efs, settings
 from datetime import datetime
 
-server = "motoserver:5000" if settings.TEST_SERVER_MODE else "efs.us-east-1.amazonaws.com"
 
 @mock_efs
-def test_create_file_system_type_bursting(server_mode_fixture):
-    client = boto3.client("efs", region_name="us-east-1", endpoint_url=f"http://{server}")
+def test_create_file_system_type_bursting():
+    if settings.TEST_SERVER_MODE:
+        client = boto3.client("efs", region_name="us-east-1", endpoint_url="http://motoserver:5000")
+    else:
+        client = boto3.client("efs", region_name="us-west-1")
     file_system = client.create_file_system(
         CreationToken="testing-e72ab305-4828-45e7-8d06-0318d54ffdd7",
         Encrypted=True,
