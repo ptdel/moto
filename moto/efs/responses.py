@@ -13,6 +13,7 @@ class EFSResponse(BaseResponse):
         return efs_backends[self.region]
 
     def create_file_system(self):
+        owner_id = self.get_current_user()
         creation_token = self._get_param("CreationToken")
         performance_mode = self._get_param("PerformanceMode")
         encrypted = self._get_param("Encrypted")
@@ -27,6 +28,7 @@ class EFSResponse(BaseResponse):
             return BadRequest  # TODO: return the proper error body and type
 
         request = self.efs_backend.create_file_system(
+            owner_id=owner_id,
             creation_token=creation_token,
             performance_mode=performance_mode,
             encrypted=encrypted,

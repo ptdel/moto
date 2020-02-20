@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from boto3 import Session
 from moto.core import BaseBackend, BaseModel
-from .utils import random_file_system_id, aws_date_time, get_name_tag
+from .utils import random_file_system_id, random_mount_target_id, aws_date_time, get_name_tag
 
 
 class BaseObject(BaseModel):
@@ -194,14 +194,44 @@ class EFSBackend(BaseBackend):
         self.__dict__ = {}
         self.__init__(region_name)
 
+    def number_of_mount_targets(self, id):
+        return len([mount for mount in self.mount_targets if self.mount_targets[mount].file_system_id == id])
+
+
     def create_access_point(
-        self, client_token, tags, file_system_id, posix_user, root_directory
+        self, client_token, file_system_id, posix_user=None, root_directory=None, tags=None
     ):
-        pass
+        access_point = AccessPointDescription(
+            client_token=client_token,
+            name=get_name_tag(tags),
+            tags=tags,
+            access_point_id=random_mount_target_id(),
+            access_point_arn="",  # format: arn:aws:elasticfilesystem:us-east-1:{account}:access-point/{access_point_id}
+            file_system_id=file_system_id,
+            posix_user=PosixUser(
+                uid="",
+                gid="",
+                secondary_gids=""
+            ),
+            root_directory=RootDirectory(
+                creation_info=CreationInfo(
+                    owner_uid="",
+                    owner_gid="",
+                    permissions=""
+                ),
+                path=""
+            ),
+            owner_id="",
+            life_cycle_state=""
+
+        )
+        self.access_points[access_point.access_point_id] = access_point.response()
+        return access_point.response()
 
     def create_file_system(
         self,
         creation_token,
+        owner_id=None,
         encrypted=None,
         kms_key_id=None,
         performance_mode=None,
@@ -209,18 +239,18 @@ class EFSBackend(BaseBackend):
         tags=None,
         throughput_mode=None,
     ):
-
+        
         file_system = FileSystemDescription(
-            owner_id="123456789012",
+            owner_id=owner_id,
             creation_time=aws_date_time(),
             creation_token=creation_token,
             encrypted=encrypted or False,
             file_system_id=random_file_system_id(),
             number_of_mount_targets=0,
-            life_cycle_state="available",
+            life_cycle_state="available",  # TODO: doublecheck default state settings
             kms_key_id=kms_key_id,
             size_in_bytes=FileSystemSize(
-                timestamp=aws_date_time(),
+                timestamp=aws_date_time(),  # TODO: make sure these are actual default values
                 value=6144,
                 value_in_I_A=0,
                 value_in_standard=6144,
