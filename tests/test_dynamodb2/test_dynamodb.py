@@ -3610,6 +3610,31 @@ def test_update_supports_list_append_maps():
 
 
 @mock_dynamodb2
+def test_update_supports_list_append_with_nested_if_not_exists_operation():
+    dynamo = boto3.resource("dynamodb", region_name="us-west-1")
+    table_name = "test"
+
+    dynamo.create_table(
+        TableName=table_name,
+        AttributeDefinitions=[{"AttributeName": "Id", "AttributeType": "S"}],
+        KeySchema=[{"AttributeName": "Id", "KeyType": "HASH"}],
+        ProvisionedThroughput={"ReadCapacityUnits": 20, "WriteCapacityUnits": 20},
+    )
+
+    table = dynamo.Table(table_name)
+
+    table.put_item(Item={"Id": "item-id", "nest1": {"nest2": {}}})
+    table.update_item(
+        Key={"Id": "item-id"},
+        UpdateExpression="SET nest1.nest2.event_history = list_append(if_not_exists(nest1.nest2.event_history, :empty_list), :new_value)",
+        ExpressionAttributeValues={":empty_list": [], ":new_value": ["some_value"]},
+    )
+    table.get_item(Key={"Id": "item-id"})["Item"].should.equal(
+        {"Id": "item-id", "nest1": {"nest2": {"event_history": ["some_value"]}}}
+    )
+
+
+@mock_dynamodb2
 def test_update_catches_invalid_list_append_operation():
     client = boto3.client("dynamodb", region_name="us-east-1")
 
@@ -3721,3 +3746,24 @@ def test_allow_update_to_item_with_different_type():
     table.get_item(Key={"job_id": "b"})["Item"]["job_details"][
         "job_name"
     ].should.be.equal({"nested": "yes"})
+
+
+@mock_dynamodb2
+def test_query_catches_when_no_filters():
+    dynamo = boto3.resource("dynamodb", region_name="eu-central-1")
+    dynamo.create_table(
+        AttributeDefinitions=[{"AttributeName": "job_id", "AttributeType": "S"}],
+        TableName="origin-rbu-dev",
+        KeySchema=[{"AttributeName": "job_id", "KeyType": "HASH"}],
+        ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
+    )
+    table = dynamo.Table("origin-rbu-dev")
+
+    with assert_raises(ClientError) as ex:
+        table.query(TableName="original-rbu-dev")
+
+    ex.exception.response["Error"]["Code"].should.equal("ValidationException")
+    ex.exception.response["ResponseMetadata"]["HTTPStatusCode"].should.equal(400)
+    ex.exception.response["Error"]["Message"].should.equal(
+        "Either KeyConditions or QueryFilter should be present"
+    )
